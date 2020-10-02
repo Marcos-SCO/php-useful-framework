@@ -3,6 +3,7 @@
 namespace App\Config;
 
 use App\Traits\QueryTrait;
+use App\Interfaces\DatabaseInterface;
 
 class Conn
 {

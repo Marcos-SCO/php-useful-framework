@@ -5,6 +5,8 @@ namespace App\Config;
 use PDO;
 use PDOException;
 
+use App\Interfaces\DatabaseInterface;
+
 class MySql implements DatabaseInterface
 {
     public $pdo;
