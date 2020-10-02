@@ -7,12 +7,12 @@ use App\Traits\QueryTrait;
 
 class Model
 {
-    public $conn;
+    public static $conn;
 
     use QueryTrait;
 
     public function __construct(Conn $conn)
     {
-        $this->conn = $conn->conn;
+        return self::$conn = $conn->conn;
     }
 }

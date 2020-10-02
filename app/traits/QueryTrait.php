@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\Model;
+
 trait QueryTrait
 {
     // Bind values
@@ -29,7 +31,7 @@ trait QueryTrait
     public function select($table)
     {
         $query = "SELECT * FROM {$table}";
-        $this->stmt = $this->conn->prepare($query);
+        $this->stmt = Model::$conn->prepare($query);
         $this->stmt->execute();
         $result = $this->stmt->fetchAll();
         $this->stmt->closeCursor();
@@ -43,13 +45,13 @@ trait QueryTrait
 
         $query = "INSERT INTO {$table} ({$fields}) VALUES ({$places})";
 
-        $this->stmt = $this->conn->prepare($query);
+        $this->stmt = Model::$conn->prepare($query);
         foreach ($data as $name => $value) {
             $this->bind(":{$name}", $value);
         }
         $this->stmt->execute();
         $this->stmt->closeCursor();
-        return $this->conn->lastInsertId();
+        return Model::$conn->lastInsertId();
     }
 
     public function update($table, array $data, array $id)
@@ -63,7 +65,7 @@ trait QueryTrait
         }
         $query = rtrim($query, ",");
         $query .= " WHERE {$idKey} = :{$idKey}";
-        $this->stmt = $this->conn->prepare($query);
+        $this->stmt = Model::$conn->prepare($query);
         foreach ($data as $field => $value) {
             $this->bind(":{$field}", $value);
         }
@@ -85,7 +87,7 @@ trait QueryTrait
         }
         $query = rtrim($query, "AND");
         // dump($query);
-        $this->stmt = $this->conn->prepare($query);
+        $this->stmt = Model::$conn->prepare($query);
         foreach ($data as $field => $value) {
             $this->bind(":{$field}", $value);
         }
@@ -97,7 +99,7 @@ trait QueryTrait
 
     public function customQuery($query, array $data = null)
     {
-        $this->stmt = $this->conn->prepare($query);
+        $this->stmt = Model::$conn->prepare($query);
         if ($data) {
             foreach ($data as $field => $value) {
                 $this->bind(":{$field}", $value);
