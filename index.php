@@ -1,9 +1,5 @@
 <?php
 
-use App\Config\Conn;
-
-require_once "./app/bootstrap.php";
-
 function dump($dump) {
     echo '<pre style="font-size:1.2rem;">';
         var_dump($dump);
@@ -11,7 +7,25 @@ function dump($dump) {
     return;
 }
 
-$conn = new Conn(new App\Config\MySql());
+use App\Config\Conn;
+use App\Config\MySql;
+use App\Models\Model;
+use App\Models\User;
+
+require_once "./app/bootstrap.php";
+
+// Connection 
+$conn = new Conn(new MySql);
+// $c = new Model(new App\Config\MySql());
+
+// $model = new Model($conn);
+$user = new User($conn);
+var_dump($user->select('users'));
+
+
+//$select = $model->select('users');
+// var_dump($select);
+// var_dump($select);
 
 /*// Select *
 $select = $db->select('users');
