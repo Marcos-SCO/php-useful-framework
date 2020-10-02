@@ -2,7 +2,7 @@
 
 require_once "./app/bootstrap.php";
 
-var_dump($_GET);
+// var_dump($_GET);
 
 //$select = $model->select('users');
 // var_dump($select);

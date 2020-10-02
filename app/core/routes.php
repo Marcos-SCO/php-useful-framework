@@ -1,5 +1,6 @@
 <?php
 
+use App\Controller\Home;
 use CoffeeCode\Router\Router;
 use App\Controller\Users;
 
@@ -14,18 +15,24 @@ $router->namespace("App\Controller");
 // Model instantiation and connection set
 $model = new App\Models\Model($conn);
 
+// Home
+$home = new Home;
+$router->get("/", function () {
+    global $home;
+    $home->index();
+});
+
 // User
 $users = new Users();
 // $user->select('users');
-
-$router->get("/usuarios", function() {
+$router->get("/usuarios", function () {
     global $users;
     $users->index();
 });
-$router->get("/usuarios/{id}", function($params) {
+$router->get("/usuarios/{id}", function ($params) {
     // Extract variables
     extract($params);
-    
+
     global $users;
     $users->fetch($id);
 });
