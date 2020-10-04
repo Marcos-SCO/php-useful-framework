@@ -2,7 +2,6 @@
 
 use App\Controller\Home;
 use CoffeeCode\Router\Router;
-use App\Controller\Users;
 
 /* Documentation: */
 // https://packagist.org/packages/coffeecode/router
@@ -21,20 +20,9 @@ $router->get("/", function () {
     global $home;
     $home->index();
 });
-
-// User
-$users = new Users();
-// $user->select('users');
-$router->get("/usuarios", function () {
-    global $users;
-    $users->index();
-});
-$router->get("/usuarios/{id}", function ($params) {
-    // Extract variables
-    extract($params);
-
-    global $users;
-    $users->fetch($id);
+$router->get("/usuario/{id}", function ($id) {
+    global $home;
+    $home->getUser($id);
 });
 
 $router->dispatch();

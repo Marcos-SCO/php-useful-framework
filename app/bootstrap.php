@@ -5,8 +5,6 @@ require_once "./app/helpers/functions.php";
 
 use App\Config\Conn;
 use App\Config\MySql;
-use App\Models\Model;
-use App\Models\User;
 
 // Env variables will be in $_ENV array
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 1), '.env');
