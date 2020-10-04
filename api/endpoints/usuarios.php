@@ -15,15 +15,15 @@ $router->post("/api/usuarios", function () {
     global $users;
     $users->createUser();
 });
-$router->delete("/usuarios", function() {
+$router->delete("/api/usuarios", function() {
     global $users;
     $users->deleteUser();
 });
-$router->put("/usuarios", function() {
+$router->put("/api/usuarios", function() {
     global $users;
     $users->updateUser();
 });
-$router->get("/usuarios/{id}", function ($params) {
+$router->get("/api/usuarios/{id}", function ($params) {
     // Extract variables
     extract($params);
 
