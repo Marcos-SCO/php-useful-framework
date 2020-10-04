@@ -9,7 +9,7 @@ echo "<h1>$title</h1>";
 
 <ul>
     <?php
-        echo "<li>$name</li>";
+        echo "<li>$first_name</li>";
         echo "<li>$last_name</li>";
     ?>
 </ul>
