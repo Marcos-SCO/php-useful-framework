@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Model;
+use PDOException;
 
 trait QueryTrait
 {
@@ -57,25 +58,38 @@ trait QueryTrait
     public function update($table, array $data, array $id)
     {
         // Destruct id
-        list($idKey, $idVal) = $id;
+        // list($idKey, $idVal) = $id;
+        $idKey = array_keys($id)[0];
+        $idVal = array_values($id)[0];
 
         $query = "UPDATE {$table} SET";
         foreach ($data as $field => $value) {
             $query .= " {$field} = :{$field},";
         }
+
         $query = rtrim($query, ",");
-        $query .= " WHERE {$idKey} = :{$idKey}";
+        $query .= " WHERE {$idKey} = :idKey";
+
         $this->stmt = Model::$conn->prepare($query);
+
         foreach ($data as $field => $value) {
             $this->bind(":{$field}", $value);
         }
-        // dump($query);
-        $this->bind(":{$idKey}", $idVal);
+
         // Bind id values
-        $this->stmt->execute();
-        $result = $this->stmt->fetch();
-        $this->stmt->closeCursor();
-        return $result;
+        $this->bind(":idKey", $idVal);
+
+        try {
+            $this->stmt->execute();
+            $this->stmt->closeCursor();
+            $this->stmt->fetch();
+
+            $result = $this->stmt->rowCount();
+
+            return $result;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function delete($table, array $data)
@@ -85,19 +99,22 @@ trait QueryTrait
         foreach ($data as $field => $value) {
             $query .= " {$field} = :{$field} AND";
         }
+
         $query = rtrim($query, "AND");
-        // dump($query);
         $this->stmt = Model::$conn->prepare($query);
+
         foreach ($data as $field => $value) {
             $this->bind(":{$field}", $value);
         }
+
         $this->stmt->execute();
-        $result = $this->stmt->fetch();
         $this->stmt->closeCursor();
+
+        $result = $this->stmt->rowCount();
         return $result;
     }
 
-    public function customQuery($query, array $data = null)
+    public function customQuery($query, array $data = null, $fetchMode = null)
     {
         $this->stmt = Model::$conn->prepare($query);
         if ($data) {
@@ -106,8 +123,18 @@ trait QueryTrait
             }
         }
         $this->stmt->execute();
-        $result = $this->stmt->fetch();
+        
+        $result = $this->stmt->rowCount();
+        
+        // Fetch results
+        if ($fetchMode) {
+            return $this->stmt->fetch();
+        } else if ($fetchMode == "all") {
+            return $this->stmt->fetchAll();
+        }
+
         $this->stmt->closeCursor();
+
         return $result;
     }
 }
