@@ -15,29 +15,12 @@ $router->namespace("App\Controller");
 // Model instantiation and connection set
 $model = new App\Models\Model($conn);
 
-$uri = parse_url($_GET["route"], PHP_URL_PATH);
-$uri = explode('/', $uri);
+// Home
+$router->get("/", "Home:index");
+$router->get("/home/usuario/{id}", "Home:getUser");
 
-if ($uri[1] === 'home') {
-    // Home
-    $home = new Home;
-    $router->get("/", function () {
-        global $home;
-        $home->index();
-    });
-    $router->get("/home/usuario/{id}", function ($id) {
-        global $home;
-        $home->getUser($id);
-    });
-}
-
-if ($uri[1] === 'usuario') {
-    $users = new Users;
-    $router->get("/usuario/{id}", function ($id) {
-        global $users;
-        $users->getUser($id);
-    });
-}
+// Usuários
+$router->get("/usuarios/{id}", "Users:getUser");
 
 $router->dispatch();
 

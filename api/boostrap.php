@@ -34,3 +34,16 @@ $router = new Router($_ENV["BASE"]);
 // Router namespace
 $router->namespace("App\Controller");
 
+// Usuários
+$router->get("/usuarios", "Users:index");
+$router->get("/usuarios/{id}", "Users:getUser");
+$router->post("/usuarios", "Users:createUser");
+$router->delete("/usuarios", "Users:deleteUser");
+$router->put("/usuarios", "Users:updateUser");
+
+$router->dispatch();
+
+if ($router->error()) {
+    echo $router->error();
+    // $router->redirect("/error/{$router->error()}");
+}
