@@ -37,7 +37,7 @@ class Users extends User
                 "created_at" => date("Y-m-d")
             ]);
 
-            http_response_code(200);
+            http_response_code(201);
             echo json_encode(
                 [
                     "status" => "Usuário criado com sucesso!",
@@ -49,7 +49,6 @@ class Users extends User
             echo json_encode(
                 [
                     "status" => "Erro: Usuário já existe no DB",
-                    "response" => $data
                 ]
             );
         }
@@ -70,7 +69,7 @@ class Users extends User
                 ]
             );
         } else {
-            http_response_code(401);
+            http_response_code(404);
             echo json_encode(
                 [
                     "status" => "Usuário não podê ser deletado"
