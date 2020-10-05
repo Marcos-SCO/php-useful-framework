@@ -28,13 +28,15 @@ class Users extends User
         // Find email in db
         $findUser = $this->customQuery("SELECT * FROM users WHERE email = :email", ["email" => $email]);
 
+        // Password Hash
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
         if (!$findUser) {
             $this->insert("users", [
-                "name" => $name,
+                "first_name" => $first_name,
                 "last_name" => $last_name,
                 "email" => $email,
                 "password" => $password,
-                "created_at" => date("Y-m-d")
             ]);
 
             http_response_code(201);
@@ -59,20 +61,29 @@ class Users extends User
         $data = $this->getContents();
         extract($data);
 
-        if ($this->delete("users", ["email" => $email])) {
-            http_response_code(200);
+        if (Auth::checkAuth()) {
+            if ($this->delete("users", ["email" => $email])) {
+                http_response_code(200);
 
-            echo json_encode(
-                [
-                    "status" => "Usuário deletado com sucesso!",
-                    "response" => $data
-                ]
-            );
+                echo json_encode(
+                    [
+                        "status" => "Usuário deletado com sucesso!",
+                        "response" => $data
+                    ]
+                );
+            } else {
+                http_response_code(404);
+                echo json_encode(
+                    [
+                        "status" => "Usuário não podê ser deletado"
+                    ]
+                );
+            }
         } else {
-            http_response_code(404);
+            http_response_code(401);
             echo json_encode(
                 [
-                    "status" => "Usuário não podê ser deletado"
+                    "status" => "Usuário não autenticado!"
                 ]
             );
         }
@@ -82,26 +93,40 @@ class Users extends User
     {
         $data = $this->getContents();
         extract($data);
-        $updateUser = $this->update("users", [
-            "name" => $name,
-            "last_name" => $last_name,
-            "password" => $password,
-            "email" => $email
-        ], ["email" => "asdass"]);
 
-        if ($updateUser) {
-            http_response_code(200);
-            echo json_encode(
-                [
-                    "status" => "Atualizado com sucesso!",
-                    "body" => $data
-                ]
-            );
+        if (Auth::checkAuth()) {
+
+            // Rehash password
+            $password = password_hash($password, PASSWORD_DEFAULT);
+
+            $updateUser = $this->update("users", [
+                "first_name" => $first_name,
+                "last_name" => $last_name,
+                "password" => $password,
+                "email" => $email
+            ], ["id" => $id]);
+
+            if ($updateUser) {
+                http_response_code(200);
+                echo json_encode(
+                    [
+                        "status" => "Atualizado com sucesso!",
+                        "body" => $data
+                    ]
+                );
+            } else {
+                http_response_code(401);
+                echo json_encode(
+                    [
+                        "status" => "Não foi possível atualizar"
+                    ]
+                );
+            }
         } else {
             http_response_code(401);
             echo json_encode(
                 [
-                    "status" => "Não foi possível atualizar"
+                    "status" => "Usuário não autenticado!"
                 ]
             );
         }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use App\Config\Conn;
 use App\Config\MySql;
@@ -34,6 +34,9 @@ $router = new Router($_ENV["BASE"]);
 // Router namespace
 $router->namespace("App\Controller");
 
+// Auth
+$router->post("/login", "Auth:login");
+
 // Usuários
 $router->get("/usuarios", "Users:index");
 $router->get("/usuarios/{id}", "Users:getUser");
@@ -45,5 +48,4 @@ $router->dispatch();
 
 if ($router->error()) {
     echo $router->error();
-    // $router->redirect("/error/{$router->error()}");
 }
