@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace Api\Controller;
 
 use App\Models\User;
-use App\Core\View;
+use App\Controller\Auth;
 
 class Users extends User
 {
@@ -137,8 +137,6 @@ class Users extends User
         extract($id);
         http_response_code(200);
         $user = $this->customQuery('SELECT * FROM users where id = :id', ["id" => $id], "fetch");
-
-        // View::render("user/user", ["title" => $user->name, "userInfo" => $user]);
 
         if ($user) {
             echo json_encode(
