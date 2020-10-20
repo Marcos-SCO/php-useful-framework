@@ -25,6 +25,6 @@ class Home
     {
         $user = $this->user->selectUser($id);
 
-        View::render("user/user", ["title" => $user[0]->first_name, "userInfo" => $user[0]]);
+        View::render("user/user", ["title" => $user->first_name, "userInfo" => $user]);
     }
 }

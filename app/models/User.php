@@ -11,13 +11,13 @@ class User extends Model
 
     public function selectAllUsers()
     {
-        return $this->select();
+        return $this->selectAll();
     }
 
     public function selectUser($id)
     {
         extract($id);
 
-        return $this->customQuery("SELECT * FROM " . Self::$table . " WHERE id = :id", ["id" => $id], "fetch");
+        return $this->selectBy("id", $id);
     }
 }
