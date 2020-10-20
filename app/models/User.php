@@ -16,7 +16,7 @@ class User extends Model
 
     public function selectUser($id)
     {
-        extract($id);
+        // extract($id);
 
         return $this->selectBy("id", $id);
     }

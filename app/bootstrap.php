@@ -5,6 +5,7 @@ require_once "./app/helpers/functions.php";
 
 use App\Config\Connection;
 use App\Config\MySql;
+use App\Core\Router;
 use App\Models\Model;
 use App\Models\User;
 
@@ -22,4 +23,6 @@ $conn = new Connection(new MySql);
 // Model instantiation and connection set
 $model = new App\Models\Model($conn);
 
-require_once "./app/core/routes.php";
+require_once "./app/routes.php";
+
+$route = new Router($routes);
