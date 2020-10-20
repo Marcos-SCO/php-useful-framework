@@ -1,8 +1,5 @@
 <?php
 
-use App\Controller\Home;
-use App\Core\Router;
-
 /* Documentation: */
 // https://packagist.org/packages/coffeecode/router
 
@@ -25,16 +22,6 @@ use App\Core\Router;
 //     // $router->redirect("/error/{$router->error()}");
 // }
 
-// $router = new Router();
-
-// // $router->on('GET', "/home", function() {
-// //     $home = new Home;
-// //     $home->index();
-// // });
-// $router->on("GET", '/', "Home::index");
-// $router->on("GET", "/user/{id}", "Home::getUser");
-
-// echo $router->run($router->method(), $router->uri());
-
+// Custom router routes
 $routes[] = ['/', 'Home@index'];
 $routes[] = ['/usuario/{id}', 'Home@getUser'];
