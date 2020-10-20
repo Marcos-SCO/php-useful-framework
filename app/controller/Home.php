@@ -16,17 +16,15 @@ class Home
 
     public function index()
     {
-        $users = $this->user->select("users");
+        $users = $this->user->selectAllUsers();
 
         View::render("home/index", ["title" => 'Home', "users" => $users]);
     }
 
     public function getUser($id)
     {
-        extract($id);
-        
-        $user = $this->user->customQuery("SELECT * FROM users WHERE id = :id", ["id" => $id], "fetch");
-        
-        View::render("user/user", ["title" => $user->name, "userInfo" => $user]);
+        $user = $this->user->selectUser($id);
+
+        View::render("user/user", ["title" => $user[0]->first_name, "userInfo" => $user[0]]);
     }
 }

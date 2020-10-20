@@ -24,7 +24,7 @@ class MySql implements DatabaseInterface
     public function connection()
     {
         // Set dsn
-        $dsn = 'mysql:host='.$_ENV["HOST"].';port=.'.$_ENV["PORT"].';dbname='.$_ENV['DBNAME'].';charset=utf8';
+        $dsn = 'mysql:host=' . $_ENV["HOST"] . ';port=.' . $_ENV["PORT"] . ';dbname=' . $_ENV['DBNAME'] . ';charset=utf8';
 
         $options = [
             PDO::ATTR_PERSISTENT => TRUE,

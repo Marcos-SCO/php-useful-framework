@@ -7,9 +7,9 @@ use App\Controller\Auth;
 
 class Users extends User
 {
-    public function __construct()
-    {
-    }
+    // public function __construct()
+    // {
+    // }
 
     public function index()
     {

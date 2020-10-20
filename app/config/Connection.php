@@ -4,12 +4,12 @@ namespace App\Config;
 
 use App\Interfaces\DatabaseInterface;
 
-class Conn
+class Connection
 {
-    public $conn;
+    public $connection;
 
     public function __construct(DatabaseInterface $conn)
     {
-        return $this->conn = $conn->pdo;
+        return $this->connection = $conn;
     }
 }

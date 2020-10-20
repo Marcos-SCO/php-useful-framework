@@ -14,7 +14,7 @@ class View
 
         if (is_readable($file)) {
             require_once $dirAppBase . "/views/base/header.php";
-            require $file;
+            require_once $file;
             require_once $dirAppBase . "/views/base/footer.php";
         } else {
             header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found", true, 404);

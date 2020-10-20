@@ -12,9 +12,6 @@ $router = new Router($_ENV["BASE"]);
 // Router namespace
 $router->namespace("App\Controller");
 
-// Model instantiation and connection set
-$model = new App\Models\Model($conn);
-
 // Home
 $router->get("/", "Home:index");
 $router->get("/home/usuario/{id}", "Home:getUser");
