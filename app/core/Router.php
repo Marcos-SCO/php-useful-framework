@@ -41,19 +41,22 @@ class Router
         $urlArray = explode('/', $url);
 
         foreach ($this->routes as $route) {
+            // $route[0] : /routeName/{param?}
 
             $routeArray = explode('/', $route[0]);
             $params = [];
 
             for ($i = 0; $i < count($routeArray); $i++) {
                 if ((strpos($routeArray[$i], "{") !== false) && (count($urlArray) == count($routeArray))) {
+                    // $routeArray[{param}] = paramValue
                     $routeArray[$i] = $urlArray[$i];
                     $params[] = $urlArray[$i];
                 }
-
+                // routeName/params
                 $route[0] = implode('/', $routeArray);
             }
 
+            // Verifies browser url with the formed one 
             if ($url == $route[0]) {
                 $found = true;
                 $controller = $route[1];
@@ -80,6 +83,7 @@ class Router
                     $controller->$action($this->getRequest());
             }*/
 
+            // Call obj and method with params
             call_user_func_array([$controller, $action], $params);
         } else {
             throw new \Exception("Não encontrado!");
