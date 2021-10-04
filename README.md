@@ -1,25 +1,22 @@
-# Database connection with Query builder Functions
+# Simple framework project with php
 
-Database connection with query builder Functions example
 
-# Select 
-$select = $db->select('users');
-"SELECT * FROM users"
+# Query Builder usage
+- Select
+  - $select = $db->select('users');
 
-# Insert 
-$insert = $db->insert('bands', ['name' => 'Iron Maiden', 'email' => 'ironmaiden@outlook.com']);
-----------------
-"INSERT INTO users name, email VALUES ('Iron Maiden', 'ironmaiden@outlook.com')"
+- Custom query with select
+  - $customQuery = $db->customQuery("SELECT email FROM users WHERE id = :id AND email = :email", ['id' => 97, 'email' => 'marcos_sco@outlook.com']);
 
-# Update
-$update = $db->update('users', ['name' => 'haha', 'email' => 'haha@outlook.com'], ['id', 8]);
-----------------
-"UPDATE users set name = 'haha', email = haha@outlook.com WHERE id = 8"
+- Insert example
+  - $insert = $db->insert('games', ['name' => 'Persona', 'company' => 'Atlus']);
 
-# Delete
-$delete = $db->delete('languages', ['name' => 'java', 'id' => 1]);
-----------------
-"DELETE FROM languages WHERE name = 'java' and id = 1"
+- Update
+  - $update = $db->update('games', ['name' => 'Street Fighter 2', 'year' => 1992], ['id',8]);
 
-# Custom query
-$customQuery = $db->customQuery("SELECT email FROM users WHERE id = :id AND email = :email", ['id' => 2, 'email' => 'marcos_sco@outlook.com']);
+- Delete by name and company
+  - $delete = $db->delete('games', ['name' => 'Sonic 2006', 'company' => 'sega']);
+  - DELETE WHERE name = :name AND company = : company
+
+- Delete by id
+  - $delete = $db->delete('games', ['id' => 5]);
