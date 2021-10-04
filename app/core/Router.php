@@ -66,28 +66,12 @@ class Router
             }
         }
 
-        if (isset($found)) {
-            $controller = $this->newController($controller);
+        if (!isset($found)) throw new \Exception("Não encontrado!");
 
-            /*switch (count($param)) {
-                case 1:
-                    $controller->$action($param[0], $this->getRequest());
-                    break;
-                case 2:
-                    $controller->$action($param[0], $param[1], $this->getRequest());
-                    break;
-                case 3:
-                    $controller->$action($param[0], $param[1], $param[2], $this->getRequest());
-                    break;
-                default:
-                    $controller->$action($this->getRequest());
-            }*/
+        $controller = $this->newController($controller);
 
-            // Call obj and method with params
-            call_user_func_array([$controller, $action], $params);
-        } else {
-            throw new \Exception("Não encontrado!");
-        }
+        // Call obj and method with params
+        call_user_func_array([$controller, $action], $params);
     }
 
     public function newController($controller)
@@ -96,25 +80,4 @@ class Router
 
         return new $objController;
     }
-
-    /* public function getModel($model)
-    {
-        $objModel = "\\App\\Models\\" . $model;
-        return new $objModel(DataBase::getDatabase());
-    } */
-
-    /* private function getRequest()
-    {
-        $obj = new \stdClass;
-
-        foreach ($_GET as $key => $value) {
-            @$obj->get->$key = $value;
-        }
-
-        foreach ($_POST as $key => $value) {
-            @$obj->post->$key = $value;
-        }
-
-        return $obj;
-    }*/
 }
