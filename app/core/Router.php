@@ -2,82 +2,67 @@
 
 namespace App\Core;
 
+use Exception;
+
 class Router
 {
-    private $routes;
-
-    public function __construct(array $routes)
+    private function regularExpressionMatchArrayRoutes($uri, $routes)
     {
-        $this->setRoutes($routes);
-        $this->run();
+        return array_filter($routes, function ($value) use ($uri) {
+            $regex = str_replace('/', '\/', ltrim($value, '/'));
+            return preg_match("/^$regex$/", ltrim($uri, '/'));
+        }, ARRAY_FILTER_USE_KEY);
     }
 
-    private function setRoutes($routes)
+    private function params($uri, $matchedUri)
     {
-        foreach ($routes as $route) {
-            // $route[1] : obj / method
-            $explode = explode('@', $route[1]);
-
-            // $r = route / obj / method
-            $r = [$route[0], $explode[0], $explode[1]];
-
-            $newRoutes[] = $r;
+        if (!empty($matchedUri)) {
+            $matchedToGetParams = array_keys($matchedUri)[0];
+            return array_diff(
+                // explode('/', ltrim($uri, '/')),
+                $uri,
+                explode('/', ltrim($matchedToGetParams, '/')),
+            );
         }
-
-        $this->routes = $newRoutes;
+        return [];
     }
 
-    private function getUrl()
+    private function paramsFormat($uri, $params)
     {
-        $uri = isset($_GET['route']) ? $_GET['route'] : '/';
+        // $uri = explode('/', ltrim($uri, '/'));
+        $paramsData = [];
+        foreach ($params as $index => $param) {
+            $paramsData[$uri[$index - 1]] = $param;
+        }
+        return $paramsData;
+    }
 
-        // Get url path
-        return filter_var($uri, FILTER_SANITIZE_URL);
+    private function exactMatchUriInArrayRoutes($uri, $routes)
+    {
+        return array_key_exists($uri, $routes) ? [$uri => $routes[$uri]] : [];
     }
 
     public function run()
     {
-        $url = $this->getUrl();
-        $urlArray = explode('/', $url);
+        // $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $pathInfo = $_SERVER['PATH_INFO'] ?? '/';
+        $uri = parse_url($pathInfo, PHP_URL_PATH);
+        $routes = require 'routes.php';
 
-        foreach ($this->routes as $route) {
-            // $route[0] : /routeName/{param?}
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-            $routeArray = explode('/', $route[0]);
-            $params = [];
+        $matchedUri = $this->exactMatchUriInArrayRoutes($uri, $routes[$requestMethod]);
 
-            for ($i = 0; $i < count($routeArray); $i++) {
-                if ((strpos($routeArray[$i], "{") !== false) && (count($urlArray) == count($routeArray))) {
-                    // $routeArray[{param}] = paramValue
-                    $routeArray[$i] = $urlArray[$i];
-                    $params[] = $urlArray[$i];
-                }
-                // routeName/params
-                $route[0] = implode('/', $routeArray);
-            }
-
-            // Verifies browser url with the formed one 
-            if ($url == $route[0]) {
-                $found = true;
-                $controller = $route[1];
-                $action = $route[2];
-
-                break;
-            }
+        $params = [];
+        if (empty($matchedUri)) {
+            $matchedUri = $this->regularExpressionMatchArrayRoutes($uri, $routes[$requestMethod]);
+            $uri = explode('/', ltrim($uri, '/'));
+            $params = $this->params($uri, $matchedUri);
+            $params = $this->paramsFormat($uri, $params);
         }
 
-        if (!isset($found)) throw new \Exception("Não encontrado!");
+        if (!empty($matchedUri)) return controller($matchedUri, $params);
 
-        $controller = $this->newController($controller);
-
-        // Call obj and method with params
-        call_user_func_array([$controller, $action], $params);
-    }
-
-    public function newController($controller)
-    {
-        $objController = "App\\Controllers\\" . $controller;
-
-        return new $objController;
+        throw new Exception('Algo deu errado...');
     }
 }

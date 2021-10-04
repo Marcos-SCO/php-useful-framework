@@ -7,13 +7,13 @@
         }
     ],
     "autoload": {
+        "files": [
+            "app/helpers/functions.php",
+            "app/helpers/constants.php",
+            "app/helpers/controller.php"
+        ],
         "psr-4": {
-            "App\\": "app",
-            "Api\\": "api"
+            "App\\": "app"
         }
-    },
-    "require": {
-        "firebase/php-jwt": "^5.2",
-        "vlucas/phpdotenv": "^5.3"
     }
 }

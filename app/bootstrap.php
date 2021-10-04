@@ -12,7 +12,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 1), '.env');
 $dotenv->load();
 
 // Timezone
-date_default_timezone_set($_ENV["DEFAULT_TIME_ZONE"]);
+date_default_timezone_set(DEFAULT_TIME_ZONE);
 
 // Connection 
 $conn = new Connection(new MySql);

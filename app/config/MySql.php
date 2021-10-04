@@ -24,7 +24,7 @@ class MySql implements DatabaseInterface
     public function connection()
     {
         // Set dsn
-        $dsn = 'mysql:host=' . $_ENV["HOST"] . ';port=.' . $_ENV["PORT"] . ';dbname=' . $_ENV['DBNAME'] . ';charset=utf8';
+        $dsn = 'mysql:host=' . HOST . ';port=.' . PORT . ';dbname=' . DBNAME . ';charset=utf8';
 
         $options = [
             PDO::ATTR_PERSISTENT => TRUE,
@@ -34,7 +34,7 @@ class MySql implements DatabaseInterface
         ];
 
         try {
-            $this->pdo = new PDO($dsn, $_ENV['USER'], $_ENV['PASSWORD'], $options);
+            $this->pdo = new PDO($dsn, USER, PASSWORD, $options);
 
             return $this->pdo;
         } catch (PDOException $e) {
